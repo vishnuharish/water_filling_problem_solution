@@ -20,7 +20,9 @@ class Jar
 	    end
 	   end 
 	   from.jar.sort!.reverse!
+	   return[from.jar, to.jar]
 	end
+	public
    def get_count()
       jar.count(1)
    end
@@ -31,9 +33,8 @@ class Jar
 end
 
 class Client
-
   # Assigning pair of jars to fill  
-  def queue_jars(j1,j2,j3)
+  def self.queue_jars(j1,j2,j3)
      if (j1.get_count == j1.get_size || j1.get_count > j2.get_size) && (j2.get_count == 0)
         puts "j1 -> j2"
         Jar.fill(j1,j2)
@@ -45,24 +46,23 @@ class Client
         Jar.fill(j3,j1)               
      end
   end
-  public
-    def start()
-        jar_sizes = ARGV
-        raise "Argument Error" if jar_sizes.size > 3 
-        j1 = Jar.new(jar_sizes[0].to_i,1)
-        j2 = Jar.new(jar_sizes[1].to_i,0)
-        j3 = Jar.new(jar_sizes[2].to_i,0)
-        eq_dist = j1.get_count / 2
+  
+    def start(size_1, size_2, size_3)
+        
+         
+        @j1 = Jar.new(size_1,1)
+        @j2 = Jar.new(size_2,0)
+        @j3 = Jar.new(size_3,0)
+        eq_dist = @j1.get_count / 2
         puts "*******************Moves************************"
-        queue_jars(j1,j2,j3) until j1.get_count == eq_dist && j2.get_count == eq_dist && j3.get_count == 0
-        puts "*******************Result***********************"
-        puts "#{j1.get_count}, #{j2.get_count}, #{j3.get_count}"
+        Client.queue_jars(@j1,@j2,@j3) until @j1.get_count == eq_dist && @j2.get_count == eq_dist && @j3.get_count == 0
         puts "*******************Represtation******************"
-        puts "jar 1 => #{j1.jar.join(' ').gsub(/1/, '*').gsub(/0/, '-')}"
-        puts "jar 2 => #{j2.jar.join(' ').gsub(/1/, '*').gsub(/0/, '-')}"
-        puts "jar 3 => #{j3.jar.join(' ').gsub(/0/, '-')}"
+        puts "jar 1 => #{@j1.jar.join(' ').gsub(/1/, '*').gsub(/0/, '-')}"
+        puts "jar 2 => #{@j2.jar.join(' ').gsub(/1/, '*').gsub(/0/, '-')}"
+        puts "jar 3 => #{@j3.jar.join(' ').gsub(/0/, '-')}"
+        return [@j1.jar, @j2.jar, @j3.jar]
     end
 end
 
-client = Client.new
-client.start
+#client = Client.new
+#client.start(8,5,3)
