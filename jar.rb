@@ -1,12 +1,12 @@
 class Jar
-    attr_accessor :jar
-#    @max_size = 25
-    def initialize(capacity,value)
-       self.jar = []
-       capacity.times do
-          self.jar.append(value)
-       end   
-    end
+  attr_accessor :jar
+  def initialize(capacity,value)
+     @jar = []
+     capacity.times do
+        @jar.append(value)
+     end
+     jar = @jar   
+  end
     
 	def self.fill(from, to)
 	   to.jar.each_with_index do |val, i|
@@ -21,47 +21,13 @@ class Jar
 	   end 
 	   from.jar.sort!.reverse!
 	end
-
-
-end
-
-class BigJar < Jar
-   def initialize(capacity,value)
-      super(capacity,value)
-   end
-public   
    def get_count()
-      self.jar.count(1)
+      jar.count(1)
    end
    def get_size()
-      self.jar.size
+      jar.size
    end
-end
 
-class MediumJar < Jar
-   def initialize(capacity,value)
-      super(capacity,value)
-   end
-public   
-   def get_count()
-      self.jar.count(1)
-   end
-   def get_size()
-      self.jar.size
-   end
-end
-
-class LowJar < Jar
-   def initialize(capacity,value)
-      super(capacity,value)
-   end
-public   
-   def get_count()
-      self.jar.count(1)
-   end
-   def get_size()
-      self.jar.size
-   end
 end
 
 class Client
@@ -83,14 +49,14 @@ class Client
     def start()
         jar_sizes = ARGV
         raise "Argument Error" if jar_sizes.size > 3 
-        j1 = BigJar.new(jar_sizes[0].to_i,1)
-        j2 = MediumJar.new(jar_sizes[1].to_i,0)
-        j3 = LowJar.new(jar_sizes[2].to_i,0)
+        j1 = Jar.new(jar_sizes[0].to_i,1)
+        j2 = Jar.new(jar_sizes[1].to_i,0)
+        j3 = Jar.new(jar_sizes[2].to_i,0)
         eq_dist = j1.get_count / 2
         puts "*******************Moves************************"
         queue_jars(j1,j2,j3) until j1.get_count == eq_dist && j2.get_count == eq_dist && j3.get_count == 0
         puts "*******************Result***********************"
-        puts "#{j1.get_count} , #{j2.get_count}, #{j3.get_count}"
+        puts "#{j1.get_count}, #{j2.get_count}, #{j3.get_count}"
         puts "*******************Represtation******************"
         puts "jar 1 => #{j1.jar.join(' ').gsub(/1/, '*').gsub(/0/, '-')}"
         puts "jar 2 => #{j2.jar.join(' ').gsub(/1/, '*').gsub(/0/, '-')}"
